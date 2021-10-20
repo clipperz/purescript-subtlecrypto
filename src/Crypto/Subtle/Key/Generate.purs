@@ -30,7 +30,7 @@ generateKey :: SymmetricAlgorithm
             -> Array CryptoKeyUsage
             -> Aff CryptoKey
 generateKey a e u = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn3 generateKeyImpl a e u)
+    nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn3 generateKeyImpl a e u)
 
 -- | Generate an asymmetric keypair
 generateKeyPair :: AsymmetricAlgorithm
@@ -38,7 +38,7 @@ generateKeyPair :: AsymmetricAlgorithm
                 -> Array CryptoKeyUsage
                 -> Aff CryptoKeyPair
 generateKeyPair a e u = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn3 generateKeyImpl a e u)
+    nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn3 generateKeyImpl a e u)
 
 
 foreign import data SymmetricAlgorithm :: Type

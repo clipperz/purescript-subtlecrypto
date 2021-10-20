@@ -22,8 +22,7 @@ wrapKey :: ExternalFormat
         -> CryptoKey -- ^ Wrapping key
         -> EncryptAlgorithm
         -> Aff ArrayBuffer
-wrapKey f x k a = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn4 wrapKeyImpl f x k a)
+wrapKey f x k a = makeAff \resolve -> nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn4 wrapKeyImpl f x k a)
 
 
 foreign import unwrapKeyImpl :: Fn7 ExternalFormat ArrayBuffer CryptoKey EncryptAlgorithm ImportAlgorithm Boolean (Array CryptoKeyUsage) (Promise CryptoKey)
@@ -36,5 +35,4 @@ unwrapKey :: ExternalFormat
           -> Boolean -- ^ Extractable
           -> Array CryptoKeyUsage
           -> Aff (Maybe CryptoKey)
-unwrapKey f x k a i e u = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right <<< Just) (\_ -> resolve (Right Nothing)) (runFn7 unwrapKeyImpl f x k a i e u)
+unwrapKey f x k a i e u = makeAff \resolve -> nonCanceler <$ runPromise (resolve <<< Right <<< Just) (\_ -> resolve (Right Nothing)) (runFn7 unwrapKeyImpl f x k a i e u)

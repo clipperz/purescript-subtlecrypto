@@ -29,7 +29,7 @@ importKey :: ExternalFormat
           -> Array CryptoKeyUsage
           -> Aff CryptoKey
 importKey f x a e u = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn5 importKeyImpl f x a e u)
+    nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn5 importKeyImpl f x a e u)
 
 
 

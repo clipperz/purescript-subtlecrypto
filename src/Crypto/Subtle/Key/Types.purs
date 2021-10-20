@@ -27,12 +27,14 @@ newtype CryptoKeyType = CryptoKeyType String
 
 derive newtype instance eqCryptoKeyType :: Eq CryptoKeyType
 
-secret :: CryptoKeyType
-secret = CryptoKeyType "secret"
-public :: CryptoKeyType
-public = CryptoKeyType "public"
+secret  :: CryptoKeyType
+secret  =  CryptoKeyType "secret"
+
+public  :: CryptoKeyType
+public  =  CryptoKeyType "public"
+    
 private :: CryptoKeyType
-private = CryptoKeyType "private"
+private =  CryptoKeyType "private"
 
 
 newtype CryptoKeyUsage = CryptoKeyUsage String
@@ -40,22 +42,29 @@ newtype CryptoKeyUsage = CryptoKeyUsage String
 derive newtype instance eqCryptoKeyUsage :: Eq CryptoKeyUsage
 
 
-encrypt :: CryptoKeyUsage
-encrypt    = CryptoKeyUsage "encrypt"
-decrypt :: CryptoKeyUsage
-decrypt    = CryptoKeyUsage "decrypt"
-sign :: CryptoKeyUsage
-sign       = CryptoKeyUsage "sign"
-verify :: CryptoKeyUsage
-verify     = CryptoKeyUsage "verify"
-deriveKey :: CryptoKeyUsage
-deriveKey  = CryptoKeyUsage "deriveKey"
-deriveBits :: CryptoKeyUsage
-deriveBits = CryptoKeyUsage "deriveBits"
-wrapKey :: CryptoKeyUsage
-wrapKey    = CryptoKeyUsage "wrapKey"
-unwrapKey :: CryptoKeyUsage
-unwrapKey  = CryptoKeyUsage "unwrapKey"
+encrypt     :: CryptoKeyUsage
+encrypt     =  CryptoKeyUsage "encrypt"
+
+decrypt     :: CryptoKeyUsage
+decrypt     =  CryptoKeyUsage "decrypt"
+
+sign        :: CryptoKeyUsage
+sign        =  CryptoKeyUsage "sign"
+
+verify      :: CryptoKeyUsage
+verify      =  CryptoKeyUsage "verify"
+
+deriveKey   :: CryptoKeyUsage
+deriveKey   =  CryptoKeyUsage "deriveKey"
+
+deriveBits  :: CryptoKeyUsage
+deriveBits  =  CryptoKeyUsage "deriveBits"
+
+wrapKey     :: CryptoKeyUsage
+wrapKey     =  CryptoKeyUsage "wrapKey"
+
+unwrapKey   :: CryptoKeyUsage
+unwrapKey   =  CryptoKeyUsage "unwrapKey"
 
 
 allUsages :: Array CryptoKeyUsage
@@ -91,14 +100,17 @@ newtype ExternalFormat = ExternalFormat String
 
 derive newtype instance eqExternalFormat :: Eq ExternalFormat
 
-raw :: ExternalFormat
-raw = ExternalFormat "raw"
-pkcs8 :: ExternalFormat
-pkcs8 = ExternalFormat "pkcs8"
-spki :: ExternalFormat
-spki = ExternalFormat "spki"
-jwk :: ExternalFormat
-jwk = ExternalFormat "jwk"
+raw     :: ExternalFormat
+raw     =  ExternalFormat "raw"
+
+pkcs8   :: ExternalFormat
+pkcs8   =  ExternalFormat "pkcs8"
+
+spki    :: ExternalFormat
+spki    =  ExternalFormat "spki"
+
+jwk     :: ExternalFormat
+jwk     =  ExternalFormat "jwk"
 
 
 foreign import exportKeyImpl :: Fn2 ExternalFormat CryptoKey (Promise ArrayBuffer)
@@ -106,5 +118,4 @@ foreign import exportKeyImpl :: Fn2 ExternalFormat CryptoKey (Promise ArrayBuffe
 exportKey :: ExternalFormat
           -> CryptoKey
           -> Aff ArrayBuffer
-exportKey f x = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn2 exportKeyImpl f x)
+exportKey f x = makeAff \resolve -> nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn2 exportKeyImpl f x)

@@ -23,8 +23,8 @@ foreign import data EncryptAlgorithm :: Type
 rsaOAEP :: Maybe ArrayBuffer -- ^ Label
         -> EncryptAlgorithm
 rsaOAEP mL = case mL of
-  Nothing -> unsafeCoerce {name: "RSA_OAEP"}
-  Just l -> unsafeCoerce {name: "RSA_OAEP", label: l}
+    Nothing -> unsafeCoerce {name: "RSA_OAEP"}
+    Just l  -> unsafeCoerce {name: "RSA_OAEP", label: l}
 
 aesCTR :: ArrayBuffer -- ^ Counter
        -> Int -- ^ Counter length
@@ -40,33 +40,19 @@ aesGCM :: ArrayBuffer -- ^ Initialization vector
        -> Maybe AESTagLength -- ^ Tag length
        -> EncryptAlgorithm
 aesGCM i mD mT = case Tuple mD mT of
-  Tuple Nothing Nothing -> unsafeCoerce {name: "AES-GCM", iv: i}
-  Tuple (Just d) (Just t) -> unsafeCoerce {name: "AES-GCM", iv: i, additionalData: d, tagLength: t}
-  Tuple (Just d) Nothing -> unsafeCoerce {name: "AES-GCM", iv: i, additionalData: d}
-  Tuple Nothing (Just t) -> unsafeCoerce {name: "AES-GCM", iv: i, tagLength: t}
+    Tuple Nothing   Nothing  -> unsafeCoerce {name: "AES-GCM", iv: i}
+    Tuple (Just d)  (Just t) -> unsafeCoerce {name: "AES-GCM", iv: i, additionalData: d, tagLength: t}
+    Tuple (Just d)  Nothing  -> unsafeCoerce {name: "AES-GCM", iv: i, additionalData: d}
+    Tuple Nothing   (Just t) -> unsafeCoerce {name: "AES-GCM", iv: i, tagLength: t}
 
 aesKW :: EncryptAlgorithm
 aesKW = unsafeCoerce {name: "AES-KW"}
 
 
-
-
 foreign import encryptImpl :: Fn3 EncryptAlgorithm CryptoKey ArrayBuffer (Promise ArrayBuffer)
-
-encrypt :: EncryptAlgorithm
-        -> CryptoKey
-        -> ArrayBuffer
-        -> Aff ArrayBuffer
-encrypt a k x = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn3 encryptImpl a k x)
-
-
+encrypt :: EncryptAlgorithm -> CryptoKey -> ArrayBuffer -> Aff ArrayBuffer
+encrypt a k x = makeAff \resolve -> nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn3 encryptImpl a k x)
 
 foreign import decryptImpl :: Fn3 EncryptAlgorithm CryptoKey ArrayBuffer (Promise ArrayBuffer)
-
-decrypt :: EncryptAlgorithm
-        -> CryptoKey
-        -> ArrayBuffer
-        -> Aff (Maybe ArrayBuffer)
-decrypt a k x = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right <<< Just) (\_ -> resolve (Right Nothing)) (runFn3 decryptImpl a k x)
+decrypt :: EncryptAlgorithm -> CryptoKey -> ArrayBuffer -> Aff (Maybe ArrayBuffer)
+decrypt a k x = makeAff \resolve -> nonCanceler <$ runPromise (resolve <<< Right <<< Just) (\_ -> resolve (Right Nothing)) (runFn3 decryptImpl a k x)

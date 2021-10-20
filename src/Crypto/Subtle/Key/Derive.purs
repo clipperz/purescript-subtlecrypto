@@ -30,15 +30,13 @@ deriveKey :: DeriveAlgorithm
           -> Boolean -- ^ Extractable
           -> Array CryptoKeyUsage
           -> Aff CryptoKey
-deriveKey a k t e u = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn5 deriveKeyImpl a k t e u)
+deriveKey a k t e u = makeAff \resolve -> nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn5 deriveKeyImpl a k t e u)
 
 deriveBits :: DeriveAlgorithm
            -> CryptoKey -- ^ Base key
            -> Int -- ^ Length in bits
            -> Aff ArrayBuffer
-deriveBits a k l = makeAff \resolve ->
-  nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn3 deriveBitsImpl a k l)
+deriveBits a k l = makeAff \resolve -> nonCanceler <$ runPromise (resolve <<< Right) (resolve <<< Left) (runFn3 deriveBitsImpl a k l)
 
 
 foreign import data DeriveAlgorithm :: Type
